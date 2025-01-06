@@ -3,9 +3,9 @@ pragma solidity ^0.8.19;
 // forge-ignore: 5574
 
 import {console} from '../../lib/forge-std/src/console.sol';
-import {IDiamondCut} from '../../../lib/laguna-diamond-foundry/src/interfaces/IDiamondCut.sol';
-import {LibDeploy} from '../../../lib/laguna-diamond-foundry/script/util/LibDeploy.s.sol';
-import {PresaleFacet} from '../../../src/facets/PresaleFacet.sol';
+import {IDiamondCut} from '../../lib/laguna-diamond-foundry/src/interfaces/IDiamondCut.sol';
+import {LibDeploy} from '../../lib/laguna-diamond-foundry/script/util/LibDeploy.s.sol';
+import {PresaleFacet} from '../../src/facets/PresaleFacet.sol';
 
 library PresaleFacetDeployLib {
     string public constant FACET_NAME = 'PresaleFacetFacet';

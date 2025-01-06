@@ -8,6 +8,71 @@ pragma solidity ^0.8.19;
  */
 
 contract PresaleFragment {
+    /// @notice Emitted when the Allowlist is updated
+    /// @param oldRoot The previous root hash
+    /// @param newRoot The new root hash
+    event AllowlistMerkleRootChanged(bytes32 oldRoot, bytes32 newRoot);
+
+    /// @notice Emitted when the presale start time is updated
+    /// @param oldStartTime The previous timestamp
+    /// @param newStartTime The new timestamp
+    event PresaleStartTimeChanged(uint256 oldStartTime, uint256 newStartTime);
+
+    /// @notice Emitted when the presale total tokens are updated
+    /// @param oldTotalTokens The previous total tokens
+    /// @param newTotalTokens The new total tokens
+    event PresaleTotalTokensAvailableChanged(uint256 oldTotalTokens, uint256 newTotalTokens);
+
+    /// @notice Emited when the treasury address is updated
+    /// @param oldAddress The previous address
+    /// @param newAddress The new address
+    event TreasuryAddressChanged(address oldAddress, address newAddress);
+
+    /// @notice Emitted when the presale cost per token is updated
+    /// @param oldCost The previous cost in ETH
+    /// @param newCost The new cost in ETH
+    event PresaleCostPerTokenChanged(uint256 oldCost, uint256 newCost);
+
+    /// @notice Emitted when the timestamp when reservations can be redeemed is updated
+    /// @param oldTimestamp The previous timestamp
+    /// @param newTimestamp The new timestamp
+    event RedemptionTimestampChanged(uint256 oldTimestamp, uint256 newTimestamp);
+
+    /// @notice Emitted when a player buys presale tokens
+    /// @param user The public wallet address of the player
+    /// @param tokensBought The number of presale tokens bought
+    /// @param tokensRemaining Tokens still available for this player to buy
+    /// @param totalTokensRemaining Global tokens still available for presale
+    event PresaleTokensPurchased(
+        address indexed user,
+        uint256 indexed tokensBought,
+        uint8 tokensRemaining,
+        uint256 totalTokensRemaining
+    );
+
+    /// @notice Emitted when a player redeems their presale reservations for DN-404 tokens
+    /// @param user The public wallet address of the player
+    /// @param tokensRedeemed The number of reservations redeemed
+    event PresaleReservationsRedeemed(address indexed user, uint256 indexed tokensRedeemed);
+
+    /// @notice Emitted when the maximum number of presale tokens each player can buy is updated
+    /// @param oldTokens The previous maximum number of presale tokens
+    /// @param newTokens The new maximum number of presale tokens
+    event MaxTokensPerPlayerChanged(uint8 oldTokens, uint8 newTokens);
+
+    /// @notice Emitted when the Allowlist is updated
+    /// @param oldRoot The previous root hash
+    /// @param newRoot The new root hash
+    event AllowlistMerkleRootUpdated(bytes32 oldRoot, bytes32 newRoot);
+
+    /// @notice Emitted when permissions are changed for a CS address
+    /// @param addr The address
+    /// @param isCS If true, the address is given permission, otherwise it is revoked
+    event CSPermissionChanged(address addr, bool isCS);
+
+    /// @notice Error thrown when a merkle proof is invalid
+    error Merkle_InvalidProof();
+
     /// **********************
     /// * INITIALIZATION *
     /// **********************

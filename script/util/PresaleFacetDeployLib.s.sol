@@ -13,7 +13,7 @@ library PresaleFacetDeployLib {
     /// @notice Returns the list of public selectors belonging to the PresaleFacetFacet
     /// @return selectors List of selectors
     function getSelectorList() internal pure returns (bytes4[] memory selectors) {
-        selectors = new bytes4[](30);
+        selectors = new bytes4[](32);
         selectors[0] = PresaleFacet.initializePresale.selector;
         selectors[1] = PresaleFacet.buy.selector;
         selectors[2] = PresaleFacet.redeem.selector;
@@ -44,6 +44,8 @@ library PresaleFacetDeployLib {
         selectors[27] = PresaleFacet.getAvailableTokensAfterRedemption.selector;
         selectors[28] = PresaleFacet.isPresaleInitialized.selector;
         selectors[29] = PresaleFacet.getPresaleSoldOut.selector;
+        selectors[30] = PresaleFacet.setCSPermission.selector;
+        selectors[31] = PresaleFacet.getCSPermission.selector;
     }
 
     /// @notice Creates a FacetCut object for attaching a facet to a Diamond

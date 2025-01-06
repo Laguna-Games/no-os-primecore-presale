@@ -152,7 +152,7 @@ contract PresaleFacet {
     /// @param _merkleRoot The root hash of the allowlist merkle tree
     /// @custom:emits AllowlistMerkleRootChanged
     function setAllowlistMerkleRoot(bytes32 _merkleRoot) external {
-        LibContractOwner.enforceIsContractOwner();
+        LibPresale.enforceIsCSOrContractOwner();
         LibPresale.setAllowlistMerkleRoot(_merkleRoot);
     }
 
@@ -204,7 +204,7 @@ contract PresaleFacet {
     /// @param timestamp The start time of the presale (in Unix timestamp format)
     /// @custom:emits PresaleStartTimeChanged
     function setPresaleStartTime(uint256 timestamp) external {
-        LibContractOwner.enforceIsContractOwner();
+        LibPresale.enforceIsCSOrContractOwner();
         LibPresale.setPresaleStartTime(timestamp);
     }
 
@@ -219,7 +219,7 @@ contract PresaleFacet {
     /// @param timestamp The timestamp when redemptions can begin
     /// @custom:emits RedemptionTimestampChanged
     function setRedemptionTimestamp(uint256 timestamp) external {
-        LibContractOwner.enforceIsContractOwner();
+        LibPresale.enforceIsCSOrContractOwner();
         LibPresale.setRedemptionTimestamp(timestamp);
     }
 
@@ -301,5 +301,26 @@ contract PresaleFacet {
     /// @return The timestamp of the presale sold out
     function getPresaleSoldOut() external view returns (uint256) {
         return LibPresale.presaleStorage().presaleSoldOutTimestamp;
+    }
+
+    /// **********************
+    /// * CONTRACT MANAGEMENT *
+    /// **********************
+
+    /// @notice Grants an address CS permission
+    /// @dev Only the diamond owner can call this function
+    /// @param addr The address of the CS wallet
+    /// @param isCS If true, the address is given permission, otherwise it is revoked
+    /// @custom:emits CSPermissionChanged
+    function setCSPermission(address addr, bool isCS) external {
+        LibContractOwner.enforceIsContractOwner();
+        LibPresale.setCSPermission(addr, isCS);
+    }
+
+    /// @notice Returns whether the address has CS permission
+    /// @param addr The address of the CS wallet
+    /// @return True if the address has CS permission
+    function getCSPermission(address addr) external view returns (bool) {
+        return LibPresale.presaleStorage().csPermissions[addr];
     }
 }

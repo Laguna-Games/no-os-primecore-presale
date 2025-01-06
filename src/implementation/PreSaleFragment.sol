@@ -222,4 +222,16 @@ contract PresaleFragment {
     /// @notice Returns the timestamp of the presale sold out
     /// @return The timestamp of the presale sold out
     function getPresaleSoldOut() external view returns (uint256) {}
+
+    /// @notice Grants an address CS permission
+    /// @dev Only the diamond owner can call this function
+    /// @param addr The address of the CS wallet
+    /// @param isCS If true, the address is given permission, otherwise it is revoked
+    /// @custom:emits CSPermissionChanged
+    function setCSPermission(address addr, bool isCS) external {}
+
+    /// @notice Returns whether the address has CS permission
+    /// @param addr The address of the CS wallet
+    /// @return True if the address has CS permission
+    function getCSPermission(address addr) external view returns (bool) {}
 }

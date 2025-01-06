@@ -8,6 +8,7 @@ pragma solidity ^0.8.19;
  */
 
 import {MerkleProof} from '../../lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol';
+import {LibContractOwner} from '../../lib/laguna-diamond-foundry/src/libraries/LibContractOwner.sol';
 
 interface IDN404 {
     function mint(address to, uint256 amount) external;
@@ -76,6 +77,11 @@ library LibPresale {
     /// @param newRoot The new root hash
     event AllowlistMerkleRootUpdated(bytes32 oldRoot, bytes32 newRoot);
 
+    /// @notice Emitted when permissions are changed for a CS address
+    /// @param addr The address
+    /// @param isCS If true, the address is given permission, otherwise it is revoked
+    event CSPermissionChanged(address addr, bool isCS);
+
     /// @notice Error thrown when a merkle proof is invalid
     error Merkle_InvalidProof();
 
@@ -106,6 +112,8 @@ library LibPresale {
         bool presaleInitialized;
         /// @notice Timestamp of the presale sold out
         uint256 presaleSoldOutTimestamp;
+        /// @notice Map of addresses to CCS permission (true = allowed)
+        mapping(address user => bool allowed) csPermissions;
     }
 
     /// @notice Returns the storage pointer for presale data
@@ -421,5 +429,21 @@ library LibPresale {
         uint32 oldTokens = presaleStorage().totalTokensForSale;
         presaleStorage().totalTokensForSale = tokens;
         emit PresaleTotalTokensAvailableChanged(oldTokens, tokens);
+    }
+
+    /// @notice Grants an address CS permission
+    /// @dev Only the diamond owner can call this function
+    /// @param addr The address of the CS wallet
+    /// @param isCS If true, the address is given permission, otherwise it is revoked
+    /// @custom:emits CSPermissionChanged
+    function setCSPermission(address addr, bool isCS) external {
+        presaleStorage().csPermissions[addr] = isCS;
+        emit CSPermissionChanged(addr, isCS);
+    }
+
+    /// @notice Enforces that the caller is either the diamond owner or a CS address
+    function enforceIsCSOrContractOwner() internal view {
+        if (presaleStorage().csPermissions[msg.sender]) return;
+        LibContractOwner.enforceIsContractOwner();
     }
 }

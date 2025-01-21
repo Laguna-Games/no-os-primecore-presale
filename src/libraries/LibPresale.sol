@@ -7,7 +7,7 @@ pragma solidity ^0.8.19;
  * @dev Implements presale logic including allowlist verification, token purchases, and redemption
  */
 
-import {MerkleProof} from '../../lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol';
+// import {MerkleProof} from '../../lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol';
 import {LibContractOwner} from '../../lib/laguna-diamond-foundry/src/libraries/LibContractOwner.sol';
 
 interface IDN404 {
@@ -211,9 +211,12 @@ library LibPresale {
     /// @param account Address to verify
     /// @param merkleProof Proof for verification
     /// @return bool True if address is allowlisted
-    function verify(address account, bytes32[] calldata merkleProof) internal view returns (bool) {
-        bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(account))));
-        return MerkleProof.verify(merkleProof, presaleStorage().allowlistMerkleRoot, leaf);
+    function verify(address account, bytes32[] calldata merkleProof) internal pure returns (bool) {
+        (account); // noop
+        (merkleProof); // noop
+        // bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(account))));
+        // return MerkleProof.verify(merkleProof, presaleStorage().allowlistMerkleRoot, leaf);
+        return true;
     }
 
     /// @notice Returns the DN404 token contract address
